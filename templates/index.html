@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>COOP IT Support</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+
+
+<header class="top-nav">
+
+    <div class="nav-left">
+
+        <div class="nav-item">
+            <img src="/static/images/FindButik.png">
+        </div>
+
+        <div class="nav-item">
+            <img src="/static/images/Aviser.png">
+        </div>
+
+        <div class="nav-item">
+            <img src="/static/images/HentApp.png">
+        </div>
+
+    </div>
+
+    <div class="nav-center">
+
+        <img src="/static/images/Coop.png"
+             class="coop-logo">
+
+    </div>
+
+    <div class="nav-right">
+
+        <a href="/logout"
+           class="logout-btn">
+
+            🔒 Log ud
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<section class="hero-slider">
+
+    <button class="slider-btn left"
+            onclick="prevSlide()">
+
+        ❮
+
+    </button>
+
+    <img id="sliderImage"
+         src="/static/images/pic1.png"
+         class="slider-image">
+
+    <button class="slider-btn right"
+            onclick="nextSlide()">
+
+        ❯
+
+    </button>
+
+</section>
+
+
+
+<section class="support-section">
+
+    
+
+    <aside class="sidebar">
+
+        <h3>Support Menu</h3>
+
+
+        <button class="guide-main-button"
+                onclick="openGuideModal()">
+
+            📘 VEJLEDNINGER
+
+        </button>
+
+        <button onclick="quickAsk('Printer virker ikke')">
+            🖨 Printer fejl
+        </button>
+
+        <button onclick="quickAsk('Safepay mønter sidder fast')">
+            💰 SafePay
+        </button>
+
+        <button onclick="quickAsk('Scanner modeller')">
+            🔍 Scanner modeller
+        </button>
+
+        <button onclick="quickAsk('Glemt password')">
+            🔐 Glemt password
+        </button>
+
+        <button onclick="quickAsk('Kontakt servicedesk')">
+            ☎ Kontaktliste
+        </button>
+
+        <button onclick="quickAsk('Bagsiden af kasse')">
+            🧾 Kasse bagside
+        </button>
+
+        <button onclick="quickAsk('Dankort virker ikke')">
+            💳 Dankort 3600
+        </button>
+
+        <div class="status-box">
+
+            <span class="status-dot"></span>
+
+            System online
+
+        </div>
+
+    </aside>
+
+    
+
+    <main class="chat-container">
+
+        <div class="chat-header">
+
+            <h2>IT Support Assistent</h2>
+
+            <p>
+                Intern support til Coop butikker
+            </p>
+
+        </div>
+
+        <div id="chat">
+
+            <div class="message bot">
+
+                Hej! Jeg er din IT-support assistent.
+                <br><br>
+
+                Vælg et problem i menuen
+                eller skriv dit spørgsmål nedenfor.
+
+            </div>
+
+        </div>
+
+
+        <div id="flowButtons">
+
+            <button onclick="sendFlowAnswer('yes')">
+                Ja
+            </button>
+
+            <button onclick="sendFlowAnswer('no')">
+                Nej
+            </button>
+
+        </div>
+
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Skriv dit problem her..."
+            >
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
+        </div>
+
+    </main>
+
+</section>
+
+
+
+<section class="bottom-image-section">
+
+    <img src="/static/images/pic4.png"
+         class="bottom-image">
+
+</section>
+
+
+
+<div id="guideModal"
+     class="guide-modal">
+
+    <div class="guide-box">
+
+        <span class="guide-close"
+              onclick="closeGuideModal()">
+
+            ×
+
+        </span>
+
+        <h2>Vejledninger</h2>
+
+        <p>
+            Her kan du åbne eller downloade
+            PDF vejledninger.
+        </p>
+
+        <div class="pdf-list">
+
+            <a href="/static/pdfs/Instore_commands.pdf"
+               target="_blank"
+               download>
+
+                📄 Instore Commands
+
+            </a>
+
+            <a href="/static/pdfs/Zebra_Scanner_Manual.pdf"
+               target="_blank"
+               download>
+
+                📄 Zebra Scanner Manual
+
+            </a>
+
+            <a href="/static/pdfs/Butiks_PC_Server.pdf"
+               target="_blank"
+               download>
+
+                📄 Butiks PC Server
+
+            </a>
+
+            <a href="/static/pdfs/Freedom_commands.pdf"
+               target="_blank"
+               download>
+
+                📄 Freedom Commands
+
+            </a>
+
+            <a href="/static/pdfs/Coop_App.pdf"
+               target="_blank"
+               download>
+
+                📄 Coop App
+
+            </a>
+
+            <a href="/static/pdfs/Oversigt_skærm.pdf"
+               target="_blank"
+               download>
+
+                📄 Oversigt Skærm
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div id="imageModal"
+     class="image-modal">
+
+    <span class="close-modal"
+          onclick="closeImageModal()">
+
+        ×
+
+    </span>
+
+    <img id="modalImage">
+
+</div>
+
+
+
+<script>
+
+let slides = [
+
+    "/static/images/pic1.png",
+    "/static/images/pic2.png",
+    "/static/images/pic3.png"
+
+];
+
+let currentSlide = 0;
+
+function showSlide() {
+
+    document.getElementById("sliderImage").src =
+        slides[currentSlide];
+}
+
+function nextSlide() {
+
+    currentSlide =
+        (currentSlide + 1) % slides.length;
+
+    showSlide();
+}
+
+function prevSlide() {
+
+    currentSlide =
+        (currentSlide - 1 + slides.length)
+        % slides.length;
+
+    showSlide();
+}
+
+
+
+function openGuideModal() {
+
+    document.getElementById("guideModal")
+        .style.display = "flex";
+}
+
+function closeGuideModal() {
+
+    document.getElementById("guideModal")
+        .style.display = "none";
+}
+
+
+
+function openImageModal(src) {
+
+    document.getElementById("modalImage").src = src;
+
+    document.getElementById("imageModal")
+        .style.display = "flex";
+}
+
+function closeImageModal() {
+
+    document.getElementById("imageModal")
+        .style.display = "none";
+}
+
+
+
+function addMessage(sender, message) {
+
+    let chat = document.getElementById("chat");
+
+    let div = document.createElement("div");
+
+    div.classList.add("message");
+
+    div.classList.add(
+        sender === "Du" ? "user" : "bot"
+    );
+
+    div.innerHTML = message;
+
+    chat.appendChild(div);
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+
+
+function addImage(imageName) {
+
+    if (!imageName) return;
+
+    let chat = document.getElementById("chat");
+
+    let img = document.createElement("img");
+
+    img.src = "/static/images/" + imageName;
+
+    img.classList.add("flow-image");
+
+    img.onclick = function() {
+
+        openImageModal(img.src);
+    };
+
+    chat.appendChild(img);
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function addImages(images) {
+
+    if (!images) return;
+
+    images.forEach(imageName => {
+
+        addImage(imageName);
+
+    });
+}
+
+
+
+function showTyping() {
+
+    let chat = document.getElementById("chat");
+
+    let typing = document.createElement("div");
+
+    typing.classList.add("message", "bot");
+
+    typing.id = "typing";
+
+    typing.innerHTML = "AI skriver...";
+
+    chat.appendChild(typing);
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping() {
+
+    let typing = document.getElementById("typing");
+
+    if (typing) {
+
+        typing.remove();
+    }
+}
+
+
+
+function typeBotMessage(message) {
+
+    let chat = document.getElementById("chat");
+
+    let div = document.createElement("div");
+
+    div.classList.add("message", "bot");
+
+    chat.appendChild(div);
+
+    // IF HTML MESSAGE
+    // SHOW DIRECTLY
+
+    if (
+        message.includes("<div") ||
+        message.includes("<img") ||
+        message.includes("<h3") ||
+        message.includes("<p")
+    ) {
+
+        div.innerHTML = message;
+
+        chat.scrollTop = chat.scrollHeight;
+
+        return;
+    }
+
+    
+
+    let i = 0;
+
+    function typing() {
+
+        if (i < message.length) {
+
+            div.innerHTML += message.charAt(i);
+
+            i++;
+
+            chat.scrollTop = chat.scrollHeight;
+
+            setTimeout(typing, 12);
+        }
+    }
+
+    typing();
+}
+
+
+
+function sendMessage() {
+
+    let inputField =
+        document.getElementById("userInput");
+
+    let input = inputField.value.trim();
+
+    if (input === "") return;
+
+    addMessage("Du", input);
+
+    inputField.value = "";
+
+    showTyping();
+
+    fetch("/chat", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            message: input
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        removeTyping();
+
+        typeBotMessage(data.reply);
+
+        addImage(data.image);
+
+        addImages(data.images);
+
+        document.getElementById("flowButtons")
+            .style.display =
+                data.flow_active
+                ? "block"
+                : "none";
+    });
+}
+
+function sendFlowAnswer(answer) {
+
+    addMessage(
+        "Du",
+        answer === "yes" ? "Ja" : "Nej"
+    );
+
+    showTyping();
+
+    fetch("/flow", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            answer: answer
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        removeTyping();
+
+        typeBotMessage(data.reply);
+
+        addImage(data.image);
+
+        addImages(data.images);
+
+        document.getElementById("flowButtons")
+            .style.display =
+                data.flow_active
+                ? "block"
+                : "none";
+    });
+}
+
+function quickAsk(text) {
+
+    document.getElementById("userInput").value =
+        text;
+
+    sendMessage();
+
+    document.querySelector(".chat-container")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+}
+
+document
+.getElementById("userInput")
+.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+
+        sendMessage();
+    }
+});
+
+</script>
+
+</body>
+</html>
