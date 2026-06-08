@@ -61,7 +61,7 @@ def login():
 
             current_time = time.time()
 
-            #  LOCK
+            
 
             if current_time < lock_until:
 
@@ -76,7 +76,7 @@ def login():
                     error=f"Account låst. Prøv igen om {remaining} minutter."
                 )
 
-            # CORRECT PASSWORD
+            
 
             if password == stored_password:
 
@@ -95,11 +95,11 @@ def login():
 
                 return redirect("/")
 
-            # WRONG PASSWORD
+            
 
             failed_attempts += 1
 
-            # LOCK 
+             
 
             if failed_attempts >= 5:
 
@@ -124,7 +124,7 @@ def login():
                     error="For mange loginforsøg. Konto låst i 5 minutter."
                 )
 
-            # NORMAL WRONG LOGIN
+            
 
             cursor.execute("""
                 UPDATE users
@@ -180,7 +180,7 @@ def detect_problem(text):
 
     text = text.lower()
 
-    # FLOWCHARTS
+    
 
     if "printer" in text or "print" in text:
         return "printer"
@@ -255,7 +255,7 @@ def chat():
 
     problem = detect_problem(user_message)
 
-    # PASSWORD RESET
+    
 
     if problem == "password_reset":
 
